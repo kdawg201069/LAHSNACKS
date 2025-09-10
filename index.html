@@ -1,89 +1,111 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>LAHS Snacks</title>
+  <title>LAHS Services</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
       padding: 20px;
       text-align: center;
     }
-    h1 {
-      color: #4CAF50;
+    header {
+      margin-bottom: 30px;
+    }
+    nav {
       margin-bottom: 40px;
     }
-    iframe {
-      width: 100%;
-      height: 600px;
-      border: none;
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+      color: #4CAF50;
     }
-    .section {
-      margin-top: 60px;
-      padding: 20px;
-      border-top: 2px solid #ddd;
-    }
-    .section h2 {
-      font-size: 28px;
+    nav a:hover {
       color: #ff5722;
+    }
+    h1 {
+      color: #4CAF50;
       margin-bottom: 10px;
     }
-    .on-sale {
-      font-size: 20px;
-      color: #e53935;
-      font-weight: bold;
-      margin: 5px 0 15px 0;
-      text-shadow: 1px 1px 2px #000;
-    }
-    .section img {
-      width: 300px;
-      margin-top: 15px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
     p {
-      font-size: 16px;
+      font-size: 18px;
       color: #333;
+    }
+    .services {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 40px;
+    }
+    .card {
+      width: 250px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .card img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .card a {
+      display: inline-block;
       margin-top: 10px;
+      padding: 10px 15px;
+      background: #4CAF50;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .card a:hover {
+      background: #ff5722;
     }
   </style>
 </head>
 <body>
-  <h1>Welcome to LAHS Snacks 🍿🥤</h1>
+  <header>
+    <h1>Welcome to LAHS Services 🚀</h1>
+    <p>Snacks, food pickup, and Ebike rides — all during break, all for students!</p>
+  </header>
 
-  <!-- Snacks Section -->
-  <div class="section">
-    <h2>LAHS Snacks</h2>
-    <!-- Google Form Embed -->
-    <iframe 
-        src="https://docs.google.com/forms/d/e/1FAIpQLScASVKfIGZdV3tcrhp8oQqlzk2kwqS9p_PtLasToZtOccC5Rw/viewform?embedded=true" 
-        width="640" 
-        height="800" 
-        frameborder="0" 
-        marginheight="0" 
-        marginwidth="0">
-      Loading…
-    </iframe>
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="snacks.html">Snacks</a>
+    <a href="pickup.html">Food Pickup</a>
+    <a href="ebike.html">Ebike Transport</a>
+  </nav>
 
-    <h3>IN STOCK!!</h3>
-    <p class="on-sale">💥 On Sale: $4 → $3 💥</p>
-    <img src="https://cdn.powered-by-nitrosell.com/product_images/26/6463/large-rl-12-24-sg.jpg" alt="Instant Drinks">
+  <!-- Service Cards -->
+  <div class="services">
+    <div class="card">
+      <img src="https://cdn.powered-by-nitrosell.com/product_images/26/6463/large-rl-12-24-sg.jpg" alt="Snacks">
+      <h2>Snacks</h2>
+      <p>Order snacks & drinks instantly through our Google Form.</p>
+      <a href="snacks.html">View</a>
+    </div>
+
+    <div class="card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Fast_food_meal.jpg" alt="Food Pickup">
+      <h2>Food Pickup</h2>
+      <p>We pick up food for you during break — no waiting in line.</p>
+      <a href="pickup.html">View</a>
+    </div>
+
+    <div class="card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Ebike_example.jpg" alt="Ebike">
+      <h2>Ebike Transport</h2>
+      <p>Need a quick ride to downtown or the plaza? We’ve got you.</p>
+      <a href="ebike.html">View</a>
+    </div>
   </div>
-
-  <!-- Food Pickup Section -->
-  <div class="section">
-    <h2>Food Pickup 🍔🍟</h2>
-    <p>Order your food ahead of time and pick it up during break. No waiting in line — we grab it for you!</p>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Fast_food_meal.jpg" alt="Food Pickup">
-  </div>
-
-  <!-- Ebike Transport Section -->
-  <div class="section">
-    <h2>Ebike Transport 🚲⚡</h2>
-    <p>Need a quick ride to Downtown or Plaza during break? Hop on and we’ll get you there fast.</p>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Ebike_example.jpg" alt="Ebike Transport">
-  </div>
-
 </body>
 </html>
