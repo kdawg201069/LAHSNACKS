@@ -1,141 +1,120 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8" />
   <title>Ebike Transport | LAHS Services</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body {
+    :root{
+      --blue:#003DA5;
+      --cyan:#00AEEF;
+      --bg:linear-gradient(180deg,#ffffff,#f4f8ff);
+      --card:#f0f5ff;
+      --white:#ffffff;
+    }
+    body{
       font-family: Arial, sans-serif;
-      max-width: 1000px;
-      margin: auto;
-      padding: 20px;
-      text-align: center;
-      background: linear-gradient(180deg, #ffffff, #f4f8ff);
+      max-width:1100px;
+      margin:auto;
+      padding:22px;
+      background:var(--bg);
+      color:#111;
+    }
+    header{ text-align:center; margin-bottom:18px; }
+    h1{ color:var(--blue); font-size:36px; margin:6px 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.06); }
+    p.lead{ color:#333; font-size:16px; margin-top:6px; }
+
+    nav{ display:flex; justify-content:center; gap:12px; margin:18px 0 30px; flex-wrap:wrap; }
+    nav a{
+      padding:10px 18px; background:var(--blue); color:white; text-decoration:none; border-radius:24px; font-weight:700;
+      box-shadow:0 6px 12px rgba(0,0,0,0.12); transition:all .18s;
+    }
+    nav a:hover{ background:var(--cyan); color:#00324d; transform:translateY(-2px); }
+
+    /* layout */
+    .row{ display:flex; gap:28px; align-items:flex-start; flex-wrap:wrap; }
+    .main{ flex: 2 1 640px; min-width:300px; }
+    .side{ flex: 1 1 300px; min-width:260px; position:sticky; top:22px; height:fit-content; }
+
+    /* Destinations grid */
+    .dest-grid{ display:flex; gap:16px; flex-wrap:wrap; }
+    .dest-card{
+      background:var(--white);
+      border-radius:14px;
+      padding:14px;
+      width:calc(50% - 8px);
+      box-shadow: 6px 10px 18px rgba(0,0,0,0.06);
+      display:flex; gap:10px; align-items:center; cursor:pointer;
+      transition:transform .16s, box-shadow .16s;
+    }
+    .dest-card:hover{ transform:translateY(-6px); box-shadow: 10px 16px 28px rgba(0,0,0,0.12); }
+    .dest-card.selected{ outline:3px solid rgba(0,61,165,0.14); box-shadow: 0 12px 30px rgba(0,0,0,0.14); }
+    .thumb{ width:78px; height:78px; border-radius:10px; object-fit:cover; flex-shrink:0; }
+    .dest-info{ text-align:left; }
+    .dest-info h4{ margin:0 0 6px 0; color:var(--blue); font-size:16px; }
+    .dest-info p{ margin:0; font-size:14px; color:#333; display:flex; justify-content:space-between; gap:8px; align-items:center; }
+
+    /* price badge */
+    .price-badge{ background:var(--cyan); color:white; padding:6px 8px; border-radius:10px; font-weight:700; font-size:14px; }
+
+    /* custom destination */
+    .custom-row{ margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    input[type="text"], input[type="number"], select {
+      padding:10px; border-radius:10px; border:1px solid #dfe8ff; min-width:120px; font-size:14px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
     }
 
-    /* Header */
-    header {
-      margin-bottom: 30px;
+    /* details box */
+    .details{
+      margin-top:18px; padding:14px; border-radius:12px; background:var(--card); box-shadow:0 6px 12px rgba(0,0,0,0.04);
     }
-    h1 {
-      font-size: 38px;
-      color: #003DA5;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.15);
-      margin-bottom: 10px;
+    .details p{ margin:8px 0; font-size:15px; color:#222; }
+
+    /* Spinner */
+    .spinner-box{ background:var(--white); padding:16px; border-radius:14px; text-align:center; box-shadow: 6px 10px 20px rgba(0,0,0,0.06); }
+    .wheel{
+      width:180px; height:180px; margin:auto; border-radius:50%; border:6px solid var(--blue);
+      background: conic-gradient(var(--blue) 0 60deg, var(--cyan) 60deg 120deg, #4F8FF7 120deg 180deg, var(--blue) 180deg 240deg, var(--cyan) 240deg 300deg, #4F8FF7 300deg 360deg);
+      transition: transform 3s cubic-bezier(.22,.9,.3,1); position:relative;
     }
-    p {
-      font-size: 18px;
-      color: #333;
+    .wheel::after{ content:""; position:absolute; left:50%; top:-36px; transform:translateX(-50%); width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:16px solid #e33; }
+    .spin-btn{ margin-top:12px; padding:10px 14px; border-radius:12px; border:none; background:var(--cyan); color:white; font-weight:700; cursor:pointer; box-shadow:0 6px 12px rgba(0,0,0,0.08); }
+    .spin-btn[disabled]{ opacity:0.6; cursor:not-allowed; transform:none; }
+
+    .coupon-result{ margin-top:10px; font-weight:800; color:var(--blue); min-height:28px; }
+
+    /* checkout panel */
+    .checkout{
+      margin-top:18px; padding:14px; border-radius:12px; background:linear-gradient(180deg,#ffffff,#f7fbff);
+      box-shadow:0 8px 20px rgba(0,0,0,0.06);
+    }
+    .checkout label{ display:block; font-size:13px; margin:8px 0 6px; color:#233; text-align:left; }
+    .checkout input, .checkout select { width:100%; box-sizing:border-box; }
+    .checkout .total{ font-size:20px; font-weight:900; color:var(--blue); margin-top:10px; }
+    .checkout .cash-note{ margin-top:8px; background:#fff9e6; padding:8px; border-radius:8px; font-size:13px; color:#7a5d00; }
+
+    .btn-checkout{
+      margin-top:12px; padding:12px 14px; border-radius:12px; background:var(--blue); color:white; border:none; font-weight:800; cursor:pointer; width:100%;
+      box-shadow:0 10px 22px rgba(0,0,0,0.12);
     }
 
-    /* Nav */
-    nav {
-      margin: 20px 0 40px 0;
-    }
-    nav a {
-      margin: 0 10px;
-      text-decoration: none;
-      font-weight: bold;
-      color: white;
-      background: #003DA5;
-      padding: 10px 18px;
-      border-radius: 25px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: 0.2s;
-    }
-    nav a:hover {
-      background: #00AEEF;
-      color: white;
-    }
+    /* small helpers */
+    .muted{ color:#666; font-size:13px; }
+    .spot-photo{ width:100%; height:200px; object-fit:cover; border-radius:12px; margin-top:12px; box-shadow:0 6px 14px rgba(0,0,0,0.06); }
 
-    /* Content */
-    .content {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 30px;
-    }
-    .main {
-      flex: 2;
-      text-align: left;
-    }
-    .main img {
-      width: 100%;
-      max-width: 500px;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      margin: 20px 0;
-    }
-
-    /* Coupon Spinner */
-    .spinner-section {
-      flex: 1;
-      text-align: center;
-      position: sticky;
-      top: 20px;
-    }
-    .wheel {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      border: 6px solid #003DA5;
-      margin: auto;
-      background: conic-gradient(
-        #003DA5 0deg 60deg,
-        #00AEEF 60deg 120deg,
-        #4F8FF7 120deg 180deg,
-        #003DA5 180deg 240deg,
-        #00AEEF 240deg 300deg,
-        #4F8FF7 300deg 360deg
-      );
-      position: relative;
-      transition: transform 3s ease-out;
-    }
-    .wheel::after {
-      content: "🎉";
-      font-size: 24px;
-      position: absolute;
-      top: -35px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .spin-btn {
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #FFD60A;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    }
-    .spin-btn:hover {
-      background: #003DA5;
-      color: white;
-    }
-    .result {
-      margin-top: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #003DA5;
-    }
-
-    /* Extra filler to kill dead space */
-    .fun-facts {
-      margin-top: 30px;
-      padding: 15px;
-      border-radius: 12px;
-      background: #f0f5ff;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    @media(max-width:800px){
+      .dest-card{ width:100%; }
+      .row{ flex-direction:column; }
+      .side{ position:static; top:auto; }
     }
   </style>
 </head>
 <body>
   <header>
     <h1>Ebike Transport 🚲</h1>
-    <p>Need a quick ride to Downtown or the Plaza during break? We got you covered!</p>
+    <p class="lead">Quick rides from Los Altos High School to nearby spots — cash only. Choose a destination, spin for a coupon (one spin per device), then checkout to confirm your ride.</p>
   </header>
 
-  <!-- Nav -->
   <nav>
     <a href="index.html">Home</a>
     <a href="snacks.html">Snacks</a>
@@ -143,54 +122,356 @@
     <a href="ebike.html">Ebike Transport</a>
   </nav>
 
-  <!-- Main Content -->
-  <div class="content">
-    <!-- Info Section -->
+  <div class="row">
+    <!-- MAIN: destinations + details -->
     <div class="main">
-      <h2>Fast & Reliable</h2>
-      <p>Our Ebike transport gets you where you need to go in minutes, without wasting your break. Rides are affordable and convenient!</p>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Ebike_example.jpg" alt="Ebike Ride">
+      <section>
+        <h2 style="color:var(--blue);">Choose a destination</h2>
+        <div class="dest-grid" id="destGrid">
+          <!-- Destination cards inserted by JS -->
+        </div>
 
-      <div class="fun-facts">
-        <h3>🚀 Why Choose Ebike Transport?</h3>
-        <ul>
-          <li>No waiting for friends — instant rides</li>
-          <li>Cheaper than Uber or DoorDash</li>
-          <li>Eco-friendly & zero emissions</li>
-          <li>Arrive at Downtown in under 5 minutes</li>
-        </ul>
+        <div class="details" id="detailsBox">
+          <!-- selected destination details -->
+          <h3 id="detailsTitle">Select a destination</h3>
+          <img id="detailsImg" class="spot-photo" src="https://upload.wikimedia.org/wikipedia/commons/1/14/Ebike_example.jpg" alt="Spot photo">
+          <p id="detailsText" style="margin-top:12px;">Pick a destination above to see price, ETA, and photo. You can replace photos by clicking "Change photo" (browser-only preview).</p>
+
+          <div style="margin-top:12px;">
+            <label class="muted">Change photo (your browser only):</label>
+            <input type="file" id="changePhoto" accept="image/*">
+          </div>
+
+          <div style="margin-top:14px;">
+            <label class="muted">If destination not listed, enter custom:</label>
+            <div class="custom-row">
+              <input type="text" id="customDest" placeholder="Custom destination (e.g., 123 Main St)">
+              <input type="number" id="customMiles" placeholder="Miles (approx)" min="0" step="0.1" style="width:120px;">
+            </div>
+            <div class="muted" style="margin-top:8px;">Rate per mile: <strong id="rateLabel"></strong></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- SIDE: spinner + checkout -->
+    <aside class="side">
+      <div class="spinner-box">
+        <h3 style="color:var(--blue); margin-bottom:8px;">🎁 Spin for a Coupon</h3>
+        <div class="wheel" id="wheel"></div>
+        <button class="spin-btn" id="spinBtn">Spin</button>
+        <div class="coupon-result" id="couponResult">You can spin once per device.</div>
+        <div class="muted" style="margin-top:8px; font-size:13px;">Coupons apply to ride fare and are shown at checkout.</div>
       </div>
-    </div>
 
-    <!-- Spinner Section -->
-    <div class="spinner-section">
-      <h3>🎁 Spin for a Coupon!</h3>
-      <div class="wheel" id="wheel"></div>
-      <button class="spin-btn" onclick="spinWheel()">Spin</button>
-      <div class="result" id="result">Try your luck!</div>
-    </div>
+      <div class="checkout" style="margin-top:16px;">
+        <h3 style="color:var(--blue); margin-bottom:6px;">Checkout</h3>
+
+        <label>Name</label>
+        <input type="text" id="custName" placeholder="Your name" required>
+
+        <label>Phone</label>
+        <input type="text" id="custPhone" placeholder="Phone or DM handle">
+
+        <label>Pickup time</label>
+        <input type="text" id="custTime" placeholder="e.g., Break 2 - 10:45am">
+
+        <div class="total" id="totalLine">Total: $0.00</div>
+        <div class="cash-note">⚠️ All payments are <strong>cash only</strong> for now.</div>
+
+        <button class="btn-checkout" id="checkoutBtn">Checkout & Notify</button>
+
+        <div style="margin-top:10px;">
+          <div class="muted">When you checkout your email client will open with the ride details so the driver (or admin) gets notified. You can also enable automatic logging to Google Forms (add endpoint in code).</div>
+        </div>
+      </div>
+    </aside>
   </div>
 
   <script>
-    function spinWheel() {
-      let wheel = document.getElementById("wheel");
-      let result = document.getElementById("result");
+    /***********************
+     * CONFIG - edit these
+     ***********************/
+    const ADMIN_EMAIL = "kavi@softnets.com"; // <- CHANGE this to your email
+    const PER_MILE_RATE = 5; // $ per mile for custom destinations
+    const GOOGLE_FORM_ENDPOINT = ""; // optional: paste your Google Form formResponse URL if you have one
 
-      // Random spin between 3 and 6 rotations
-      let randDegree = Math.floor(Math.random() * 360) + 1080;
-      wheel.style.transform = "rotate(" + randDegree + "deg)";
+    // Predefined destinations (you can change images and prices)
+    const DESTINATIONS = [
+      {
+        id: "chipotle",
+        title: "Chipotle - Plaza (Mountain View)",
+        price: 3.50,
+        eta: "6–8 min",
+        desc: "Fast ride to Chipotle area in the plaza.",
+        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Chipotle_restaurant.jpg/640px-Chipotle_restaurant.jpg"
+      },
+      {
+        id: "downtown",
+        title: "Downtown Los Altos",
+        price: 2.75,
+        eta: "4–6 min",
+        desc: "Quick trip to the Downtown Los Altos area.",
+        img: "https://upload.wikimedia.org/wikipedia/commons/5/57/Los_Altos_Downtown.jpg"
+      },
+      {
+        id: "crumbl",
+        title: "Crumbl Cookies - Los Altos",
+        price: 2.50,
+        eta: "3–5 min",
+        desc: "Sweet fast ride to Crumbl Cookies.",
+        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Cookies.jpg/640px-Cookies.jpg"
+      }
+    ];
 
-      // Determine prize after spin
+    /***********************
+     * App state
+     ***********************/
+    let selectedDest = null;
+    let coupon = { code: null, amount: 0, text: "" };
+
+    /***********************
+     * Init UI
+     ***********************/
+    const destGrid = document.getElementById("destGrid");
+    const detailsTitle = document.getElementById("detailsTitle");
+    const detailsImg = document.getElementById("detailsImg");
+    const detailsText = document.getElementById("detailsText");
+    const changep = document.getElementById("changePhoto");
+    const customDestInput = document.getElementById("customDest");
+    const customMilesInput = document.getElementById("customMiles");
+    const rateLabel = document.getElementById("rateLabel");
+    const totalLine = document.getElementById("totalLine");
+    const spinBtn = document.getElementById("spinBtn");
+    const couponResult = document.getElementById("couponResult");
+    const wheel = document.getElementById("wheel");
+    const checkoutBtn = document.getElementById("checkoutBtn");
+    const custName = document.getElementById("custName");
+    const custPhone = document.getElementById("custPhone");
+    const custTime = document.getElementById("custTime");
+
+    rateLabel.innerText = `$${PER_MILE_RATE.toFixed(2)} / mile`;
+
+    // render destination cards
+    function renderDestinations(){
+      destGrid.innerHTML = "";
+      DESTINATIONS.forEach(d => {
+        const card = document.createElement("div");
+        card.className = "dest-card";
+        card.dataset.id = d.id;
+        card.innerHTML = `
+          <img class="thumb" src="${d.img}" alt="${escapeHtml(d.title)}">
+          <div class="dest-info">
+            <h4>${escapeHtml(d.title)}</h4>
+            <p><span class="muted">${escapeHtml(d.eta)}</span><span class="price-badge">$${d.price.toFixed(2)}</span></p>
+          </div>
+        `;
+        card.addEventListener("click", () => selectDestination(d.id));
+        destGrid.appendChild(card);
+      });
+    }
+
+    function selectDestination(id){
+      // clear custom inputs
+      customDestInput.value = "";
+      customMilesInput.value = "";
+      selectedDest = DESTINATIONS.find(x => x.id === id);
+      // highlight selected
+      document.querySelectorAll(".dest-card").forEach(c => c.classList.toggle("selected", c.dataset.id === id));
+      // update details panel
+      detailsTitle.innerText = selectedDest.title;
+      detailsImg.src = selectedDest.img;
+      detailsText.innerText = `${selectedDest.desc} ETA: ${selectedDest.eta}. Price: $${selectedDest.price.toFixed(2)}.`;
+      updateTotal();
+    }
+
+    // image change (browser-only preview)
+    changep.addEventListener("change", (e) => {
+      const f = e.target.files && e.target.files[0];
+      if (!f) return;
+      const url = URL.createObjectURL(f);
+      detailsImg.src = url;
+    });
+
+    function computePrice(){
+      // if custom destination filled
+      const customName = (customDestInput.value || "").trim();
+      const miles = parseFloat(customMilesInput.value);
+      if (customName && !isNaN(miles) && miles >= 0) {
+        let base = Math.max(2.0, PER_MILE_RATE * miles); // minimum charge $2
+        return { price: round2(base), label: `${customName} — ${miles.toFixed(1)} mi` };
+      }
+      if (selectedDest) return { price: round2(selectedDest.price), label: selectedDest.title };
+      return { price: 0, label: "No destination selected" };
+    }
+
+    function updateTotal(){
+      const res = computePrice();
+      let total = res.price;
+      if (coupon && coupon.amount) {
+        // coupon.amount can be either absolute ($) or percent (if <1 assume percent)
+        if (coupon.amount > 1) total = Math.max(0, total - coupon.amount);
+        else total = Math.max(0, total * (1 - coupon.amount));
+      }
+      totalLine.innerText = `Total: $${round2(total).toFixed(2)}${coupon && coupon.text ? " • " + coupon.text : ""}`;
+    }
+
+    function round2(n){ return Math.round(n*100)/100; }
+
+    /***********************
+     * Spinner (one-time)
+     ***********************/
+    const SPIN_KEY = "lahs_ebike_spun";
+
+    function canSpin(){ return !localStorage.getItem(SPIN_KEY); }
+
+    function initSpinner(){
+      if (!canSpin()){
+        spinBtn.disabled = true;
+        couponResult.innerText = localStorage.getItem(SPIN_KEY + "_result") || "You already spun.";
+        wheel.style.transform = "rotate(0deg)";
+      } else {
+        couponResult.innerText = "You can spin once per device.";
+      }
+    }
+
+    function spinWheel(){
+      if (!canSpin()) return;
+      spinBtn.disabled = true;
+      // random rotations (3-6) and degree
+      const rotations = Math.floor(Math.random()*3) + 3;
+      const degree = Math.floor(Math.random()*360);
+      const randDegree = rotations*360 + degree;
+      wheel.style.transform = `rotate(${randDegree}deg)`;
+      // decide prize after animation
       setTimeout(() => {
-        let finalDeg = randDegree % 360;
-        if (finalDeg < 60) result.innerText = "🎟️ 50% OFF!";
-        else if (finalDeg < 120) result.innerText = "🎟️ Free Ride Next Time!";
-        else if (finalDeg < 180) result.innerText = "🎟️ $1 Off!";
-        else if (finalDeg < 240) result.innerText = "🎟️ 25% OFF!";
-        else if (finalDeg < 300) result.innerText = "🎟️ Spin Again!";
-        else result.innerText = "🎟️ $0.50 Off!";
+        const final = randDegree % 360;
+        // segments of 60deg each:
+        let prize;
+        if (final < 60) prize = { text: "50% OFF", amount: 0.5 }; // percent
+        else if (final < 120) prize = { text: "Free Ride Next Time", amount: 9999 }; // sentinel for free next time (we'll treat specially)
+        else if (final < 180) prize = { text: "$1.00 OFF", amount: 1.00 }; // dollar
+        else if (final < 240) prize = { text: "25% OFF", amount: 0.25 };
+        else if (final < 300) prize = { text: "Spin Again", amount: 0 }; // no prize
+        else prize = { text: "$0.50 OFF", amount: 0.5 };
+
+        // apply prize
+        if (prize.amount === 9999) {
+          coupon = { code: "FREERIDE", amount: 9999, text: prize.text };
+        } else {
+          coupon = { code: "SPIN" + Date.now(), amount: prize.amount, text: prize.text };
+        }
+        // persist that device spun
+        localStorage.setItem(SPIN_KEY, "1");
+        localStorage.setItem(SPIN_KEY + "_result", prize.text);
+        couponResult.innerText = prize.text;
+        updateTotal();
       }, 3000);
     }
+
+    spinBtn.addEventListener("click", () => {
+      if (!canSpin()) return;
+      spinWheel();
+    });
+
+    /***********************
+     * Checkout flow (mailto + optional Google Form)
+     ***********************/
+    function buildOrderSummary(){
+      const res = computePrice();
+      const name = (custName.value || "").trim();
+      const phone = (custPhone.value || "").trim();
+      const time = (custTime.value || "").trim();
+      let selectedLabel = res.label;
+      if (customDestInput.value.trim()) selectedLabel = `${customDestInput.value.trim()} (${customMilesInput.value || "n/a"} mi)`;
+      // compute final total
+      let base = res.price;
+      let final = base;
+      let couponText = "";
+      if (coupon && coupon.amount) {
+        if (coupon.amount === 9999) { final = 0; couponText = coupon.text; }
+        else if (coupon.amount > 1) { final = Math.max(0, base - coupon.amount); couponText = coupon.text; }
+        else { final = Math.max(0, base * (1 - coupon.amount)); couponText = coupon.text; }
+      }
+      final = round2(final);
+      return {
+        name, phone, time, destination: selectedLabel, base: base.toFixed(2), final: final.toFixed(2), couponText
+      };
+    }
+
+    async function checkout(){
+      const summary = buildOrderSummary();
+      if (!summary.name) { alert("Please enter your name."); return; }
+      if (summary.destination === "No destination selected") { alert("Please select or enter a destination."); return; }
+
+      // Build mailto (opens user's email client so admin gets an email)
+      const subject = encodeURIComponent(`LAHS Ebike Ride Request — ${summary.destination}`);
+      const bodyLines = [
+        `Name: ${summary.name}`,
+        `Phone: ${summary.phone}`,
+        `Pickup Time: ${summary.time}`,
+        `Destination: ${summary.destination}`,
+        `Base Fare: $${summary.base}`,
+        `Coupon: ${summary.couponText || "None"}`,
+        `Total (cash): $${summary.final}`,
+        ``,
+        `Note: payments are cash only.`
+      ];
+      const body = encodeURIComponent(bodyLines.join("\n"));
+      const mailto = `mailto:${encodeURIComponent(ADMIN_EMAIL)}?subject=${subject}&body=${body}`;
+
+      // Optional: post to Google Form if endpoint provided (you must supply endpoint and entry ids)
+      if (GOOGLE_FORM_ENDPOINT) {
+        // WARNING: this requires you to set up a Google Form and replace the code below with the right entry.<ids>
+        // Here's a safe fetch attempt that will silently fail if CORS blocks it.
+        try {
+          await fetch(GOOGLE_FORM_ENDPOINT, { method: "POST", mode: "no-cors", body: new URLSearchParams({
+            "entry.XXXXX": summary.name,
+            "entry.YYYYY": summary.phone,
+            "entry.ZZZZZ": summary.destination,
+            "entry.AAAAA": summary.final
+          })});
+          // successful-ish (no-cors will not give response)
+        } catch(e){
+          console.warn("Google Form post failed (CORS?)", e);
+        }
+      }
+
+      // Open user's email client
+      window.location.href = mailto;
+
+      // Optional: show confirmation
+      alert("Checkout initiated — your email client should open. Please send the email to confirm the ride. Driver/admin will be notified.");
+    }
+
+    checkoutBtn.addEventListener("click", checkout);
+
+    /***********************
+     * Helper: escape
+     ***********************/
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c]));
+    }
+
+    /***********************
+     * Init / events
+     ***********************/
+    renderDestinations();
+    initSpinner();
+
+    // show details for first dest by default
+    if (DESTINATIONS.length) selectDestination(DESTINATIONS[0].id);
+
+    // recompute total on custom input change
+    ["input","change"].forEach(ev => {
+      customDestInput.addEventListener(ev, () => updateTotal());
+      customMilesInput.addEventListener(ev, () => updateTotal());
+    });
+
+    // allow clicking detail image to reset to selected dest photo
+    detailsImg.addEventListener("click", () => {
+      if (selectedDest) detailsImg.src = selectedDest.img;
+    });
   </script>
 </body>
 </html>
