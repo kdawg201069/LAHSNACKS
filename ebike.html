@@ -1,21 +1,141 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ebike Transport</title>
+  <title>Ebike Transport | LAHS Services</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 900px; margin: auto; padding: 20px; text-align: center; }
-    h1 { color: #4CAF50; margin-bottom: 10px; }
-    nav { margin-bottom: 40px; }
-    nav a { margin: 0 15px; text-decoration: none; font-weight: bold; color: #4CAF50; }
-    nav a:hover { color: #ff5722; }
-    img { width: 350px; margin-top: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-    p { font-size: 18px; color: #333; }
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+      text-align: center;
+      background: linear-gradient(180deg, #ffffff, #f4f8ff);
+    }
+
+    /* Header */
+    header {
+      margin-bottom: 30px;
+    }
+    h1 {
+      font-size: 38px;
+      color: #003DA5;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 18px;
+      color: #333;
+    }
+
+    /* Nav */
+    nav {
+      margin: 20px 0 40px 0;
+    }
+    nav a {
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+      color: white;
+      background: #003DA5;
+      padding: 10px 18px;
+      border-radius: 25px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: 0.2s;
+    }
+    nav a:hover {
+      background: #00AEEF;
+      color: white;
+    }
+
+    /* Content */
+    .content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 30px;
+    }
+    .main {
+      flex: 2;
+      text-align: left;
+    }
+    .main img {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      margin: 20px 0;
+    }
+
+    /* Coupon Spinner */
+    .spinner-section {
+      flex: 1;
+      text-align: center;
+      position: sticky;
+      top: 20px;
+    }
+    .wheel {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 6px solid #003DA5;
+      margin: auto;
+      background: conic-gradient(
+        #003DA5 0deg 60deg,
+        #00AEEF 60deg 120deg,
+        #4F8FF7 120deg 180deg,
+        #003DA5 180deg 240deg,
+        #00AEEF 240deg 300deg,
+        #4F8FF7 300deg 360deg
+      );
+      position: relative;
+      transition: transform 3s ease-out;
+    }
+    .wheel::after {
+      content: "🎉";
+      font-size: 24px;
+      position: absolute;
+      top: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .spin-btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #FFD60A;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+    .spin-btn:hover {
+      background: #003DA5;
+      color: white;
+    }
+    .result {
+      margin-top: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #003DA5;
+    }
+
+    /* Extra filler to kill dead space */
+    .fun-facts {
+      margin-top: 30px;
+      padding: 15px;
+      border-radius: 12px;
+      background: #f0f5ff;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body>
-  <h1>Ebike Transport 🚲⚡</h1>
+  <header>
+    <h1>Ebike Transport 🚲</h1>
+    <p>Need a quick ride to Downtown or the Plaza during break? We got you covered!</p>
+  </header>
 
-  <!-- Navigation -->
+  <!-- Nav -->
   <nav>
     <a href="index.html">Home</a>
     <a href="snacks.html">Snacks</a>
@@ -23,9 +143,54 @@
     <a href="ebike.html">Ebike Transport</a>
   </nav>
 
-  <p>Need a quick ride to Downtown or the Plaza during break? Our Ebike transport gets you there fast and safe.</p>
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Info Section -->
+    <div class="main">
+      <h2>Fast & Reliable</h2>
+      <p>Our Ebike transport gets you where you need to go in minutes, without wasting your break. Rides are affordable and convenient!</p>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Ebike_example.jpg" alt="Ebike Ride">
 
-  <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Ebike_example.jpg" alt="Ebike Transport">
+      <div class="fun-facts">
+        <h3>🚀 Why Choose Ebike Transport?</h3>
+        <ul>
+          <li>No waiting for friends — instant rides</li>
+          <li>Cheaper than Uber or DoorDash</li>
+          <li>Eco-friendly & zero emissions</li>
+          <li>Arrive at Downtown in under 5 minutes</li>
+        </ul>
+      </div>
+    </div>
 
+    <!-- Spinner Section -->
+    <div class="spinner-section">
+      <h3>🎁 Spin for a Coupon!</h3>
+      <div class="wheel" id="wheel"></div>
+      <button class="spin-btn" onclick="spinWheel()">Spin</button>
+      <div class="result" id="result">Try your luck!</div>
+    </div>
+  </div>
+
+  <script>
+    function spinWheel() {
+      let wheel = document.getElementById("wheel");
+      let result = document.getElementById("result");
+
+      // Random spin between 3 and 6 rotations
+      let randDegree = Math.floor(Math.random() * 360) + 1080;
+      wheel.style.transform = "rotate(" + randDegree + "deg)";
+
+      // Determine prize after spin
+      setTimeout(() => {
+        let finalDeg = randDegree % 360;
+        if (finalDeg < 60) result.innerText = "🎟️ 50% OFF!";
+        else if (finalDeg < 120) result.innerText = "🎟️ Free Ride Next Time!";
+        else if (finalDeg < 180) result.innerText = "🎟️ $1 Off!";
+        else if (finalDeg < 240) result.innerText = "🎟️ 25% OFF!";
+        else if (finalDeg < 300) result.innerText = "🎟️ Spin Again!";
+        else result.innerText = "🎟️ $0.50 Off!";
+      }, 3000);
+    }
+  </script>
 </body>
 </html>
